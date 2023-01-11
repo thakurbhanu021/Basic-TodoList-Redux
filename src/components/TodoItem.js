@@ -1,12 +1,15 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { toggleComplete } from '../store/todoSlice';
+import { toggleComplete , deleteTodo} from '../store/todoSlice';
 
 const TodoItem = ({ id, title, completed }) => {
 	const dispatch = useDispatch();
 
 	const handleCompleteClick = () => {
 		dispatch(toggleComplete({id:id, completed: !completed}))
+	}
+	const handleDeleteTodo = () => {
+		dispatch(deleteTodo({id:id}))
 	}
 	return (
 		<li className={`list-group-item ${completed && 'list-group-item-success'}`}>
@@ -15,7 +18,7 @@ const TodoItem = ({ id, title, completed }) => {
 					<input type='checkbox' className='mr-3' checked={completed} onChange={handleCompleteClick}></input>
 					{title}
 				</span>
-				<button className='btn btn-danger'>Delete</button>
+				<button className='btn btn-danger' onClick={handleDeleteTodo}>Delete</button>
 			</div>
 		</li>
 	);
