@@ -1,5 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+const getTodosAsync = createAsyncThunk('todos/getTodosAsync',
+  async () => {
+    const response = fetch('https://basic-todolist-12587-default-rtdb.firebaseio.com/todos')
+    if(response.ok){
+      const todos = await response.json();
+      return {todos}
+    }
+  }
+)
+ 
 const todoSlice = createSlice({
   name: "todos",
   initialState: [
@@ -26,6 +36,9 @@ const todoSlice = createSlice({
         return state.filter((todo)=> todo.id !== action.payload.id)
     }
   },
+  extraReducers: {
+    [getTodosAsync.fulfilled]: (state,action)=>{}
+  }
 });
 
 export const { addTodo, toggleComplete, deleteTodo } = todoSlice.actions;
