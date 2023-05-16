@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const getTodosAsync = createAsyncThunk('todos/getTodosAsync',
+export const getTodosAsync = createAsyncThunk('todos/getTodosAsync', 
   async () => {
-    const response = fetch('https://basic-todolist-12587-default-rtdb.firebaseio.com/todos')
+    const response = await fetch('http://localhost:7000/todos');
     if(response.ok){
       const todos = await response.json();
-      return {todos}
+      return {todos};
     }
   }
 )
- 
+
 const todoSlice = createSlice({
   name: "todos",
   initialState: [
@@ -37,7 +37,13 @@ const todoSlice = createSlice({
     }
   },
   extraReducers: {
-    [getTodosAsync.fulfilled]: (state,action)=>{}
+    [getTodosAsync.pending]: (state,action)=> {
+      console.log('Fetching todos')
+    },
+    [getTodosAsync.fulfilled]: (state,action) => {
+      console.log('Fetched todos')
+      return action.payload.todos;
+    }
   }
 });
 
